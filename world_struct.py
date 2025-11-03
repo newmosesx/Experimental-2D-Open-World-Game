@@ -6,27 +6,24 @@ import os
 import pickle
 
 # --- Import constants ---
-from world_structures.world_constants import * # Import all constants
+from world_structures.world_constants import *
 from world_structures.river_generation import generate_rivers
 
 # --- Import from custom modules ---
 from world_structures.quadtree import QuadtreeNode
-from world_structures.utils import is_point_in_polygon, point_segment_distance_sq # Import specific utils as needed
-from asset.assets import load_all_sprites # Corrected path
+from world_structures.utils import is_point_in_polygon, point_segment_distance_sq
+from asset.assets import load_all_sprites
 from world_structures.generation import (
     generate_grass_details, filter_grass_details,
     generate_trees_poisson_disk, is_too_close_to_wall,
     generate_wall_rects, generate_wall_tile_data_rotated
 )
-from world_structures.world_features import Zone # Import the new Zone class
+from world_structures.world_features import Zone
 
-# Drawing functions are typically called from the main game loop, but could be imported here if needed
-# from .drawing import draw_world_background, draw_world_details, draw_kingdom_structures
 
 # --- Import external dependencies (like dungeon generator) ---
-# Ensure this path is correct relative to where this script runs
 try:
-    from dungeon_gen import DungeonGenerator # Adjust path if needed
+    from dungeon_gen import DungeonGenerator
 except ImportError:
     print("ERROR: Could not import DungeonGenerator. Check the path.")
     # Define dummy values if import fails to avoid crashing later parts,
@@ -56,7 +53,6 @@ def generate_world_elements(loaded_sprites):
     angle_step = 2 * math.pi / FOREST_NUM_VERTICES
     for i in range(FOREST_NUM_VERTICES):
         current_angle = i * angle_step
-        # Add randomness to radius for a more organic shape
         current_radius_x = FOREST_RADIUS_X + random.uniform(-FOREST_RADIUS_VARIATION, FOREST_RADIUS_VARIATION); current_radius_x = max(FOREST_RADIUS_X * 0.1, current_radius_x) # Ensure minimum size
         current_radius_y = FOREST_RADIUS_Y + random.uniform(-FOREST_RADIUS_VARIATION, FOREST_RADIUS_VARIATION); current_radius_y = max(FOREST_RADIUS_Y * 0.1, current_radius_y)
         vx = FOREST_CENTER_X + current_radius_x * math.cos(current_angle); vy = FOREST_CENTER_Y + current_radius_y * math.sin(current_angle)
